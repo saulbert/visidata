@@ -26,6 +26,7 @@ vd.option('config', vd.config_file, 'config file to exec in Python', sheettype=N
 vd.option('play', '', 'file.vdj to replay')
 vd.option('batch', False, 'replay in batch mode (with no interface and all status sent to stdout)')
 vd.option('output', None, 'save the final visible sheet to output at the end of replay', cli_only=True)
+vd.option('output_filetype', '', 'filetype for the -o output path, overriding its extension', cli_only=True)
 vd.option('output_cell', None, 'output the cursor cell display value at exit', cli_only=True)
 vd.option('preplay', '', 'longnames to preplay before replay')
 vd.option('imports', 'plugins', 'imports to preload before .visidatarc (command-line only)')
@@ -82,6 +83,9 @@ def duptty():
 vd.optalias('i', 'interactive')
 vd.optalias('N', 'nothing')
 vd.optalias('f', 'filetype')
+vd.optalias('if', 'filetype')
+vd.optalias('input_filetype', 'filetype')
+vd.optalias('of', 'output_filetype')
 vd.optalias('p', 'play')
 vd.optalias('b', 'batch')
 vd.optalias('P', 'preplay')
@@ -374,8 +378,8 @@ def main_vd():
 
             if opt and opt.cli_only:
                 clionly_args[optname] = optval
-                if optname == 'output':
-                    output_filetype = current_args.get('filetype')  #1242 -f in effect at -o applies to output path
+                if optname == 'output_filetype':  #1242 -of sets explicit output format, independent of -f
+                    output_filetype = optval
             else:
                 # batch and interactive are only meaningful when applied globally,
                 # so exclude them from sheet-specific options. Those would
@@ -519,8 +523,8 @@ def main_vd():
 
     if vd.stackedSheets and (flPipedOutput or args.output) and not args.output_cell:
         outpath = Path(args.output or '-')
-        if args.output and output_filetype:
-            outpath.options.set('filetype', output_filetype, outpath, cmdlog=False)  #1242
+        if output_filetype:
+            outpath.options.set('filetype', output_filetype, outpath, cmdlog=False)  #1242 -of
         vd.saveSheets(outpath, vd.activeSheet, confirm_overwrite=False)
 
     if vd.stackedSheets and args.output_cell:

@@ -5,7 +5,7 @@ import sys
 from visidata import VisiData, vd, Path, BaseSheet, TableSheet, TextSheet, SettableColumn
 
 
-vd.option('filetype', '', 'specify file type', replay=True)
+vd.option('filetype', '', 'input filetype, overriding extension (-f/-if/--input-filetype)', replay=True)
 
 vd.stdinSource = None  # Path('-') with piped fp, set in main()
 

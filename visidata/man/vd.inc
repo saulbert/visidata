@@ -31,6 +31,7 @@
 .Op Cm -w Ar waitsecs
 .Op Cm --batch
 .Op Cm -i
+.Op Cm -of Ar filetype
 .Op Cm -o Ar output
 .Op Ar field Ns Cm = Ns Ar value
 .
@@ -910,10 +911,21 @@ show/hide methods and hidden properties
 .Pp
 .Lo f filetype filetype
 .No "tsv               "
-set loader to use for
+set input loader to use for
 .Ar filetype
-instead of file extension; applies to subsequent paths on the CLI (including
-.Sy -o Ns ), not to files opened later in the session
+instead of file extension (aliases
+.Sy -if Ns , Cm --input-filetype Ns ); applies to subsequent input paths on the
+CLI, not to the
+.Sy -o
+output or files opened later in the session
+.
+.Lo of output-filetype filetype
+.No "                  "
+set the saver for the
+.Sy -o
+output to
+.Ar filetype
+instead of its extension
 .
 .Lo d delimiter delimiter
 .No "\(rst                "

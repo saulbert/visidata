@@ -39,9 +39,9 @@ ls -l | vd -f fixed
 
 ### How CLI options apply to files
 
-`-f`/`--filetype` applies to all subsequent paths on the command line, not just the one immediately following.  This includes an output file given with `-o`; to save by the output file's extension instead, put `-o` before `-f`.
+`-f`/`-if`/`--input-filetype` applies to all subsequent input paths on the command line, not just the one immediately following.  The output file given with `-o` has its own flag, `-of`/`--output-filetype`; without it the output is saved by its extension.
 
-`-f` attaches only to paths given on the command line (and to piped stdin).  Files opened later from within the session use their own extensions; the `open-file` command has its own filetype field.
+`-f` attaches only to input paths given on the command line (and to piped stdin).  Files opened later from within the session use their own extensions; the `open-file` and `save-sheet` commands have their own filetype field (the *as filetype:* prompt) for overriding it.
 
 You can reset back to extension-based detection for later files with `-f ""`:
 
@@ -121,6 +121,12 @@ To load files from within a VisiData session, press `o` and enter a filepath.
 
 ~~~
 vd -b countries.fixed -o countries.tsv
+~~~
+
+The output format follows the `-o` filename's extension.  To save to a filename whose extension does not match the desired format, give `-of`/`--output-filetype`:
+
+~~~
+vd -b countries.fixed -of csv -o countries.txt
 ~~~
 
 **Note**: Not all filetypes which are supported as loaders are also supported as savers. See the [formats page](/formats#output) for the supported output formats.

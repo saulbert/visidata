@@ -42,6 +42,8 @@ printf 'a,b\n1,2\n3,4\n' > $OUTDIR/ft-data.txt
 # === -f forces loader for subsequent paths ===
 check "no -f: .txt loads as text" "a,b" $OUTDIR/ft-data.txt
 check "-f csv on .txt" "1" -f csv $OUTDIR/ft-data.txt
+check "-if alias for -f" "1" -if csv $OUTDIR/ft-data.txt
+check "--input-filetype alias for -f" "1" --input-filetype csv $OUTDIR/ft-data.txt
 check '-f "" resets to extension' "a,b" -f csv -f "" $OUTDIR/ft-data.txt
 
 # === -f applies to stdin ===
@@ -51,12 +53,19 @@ if [[ "$result" != "1" ]]; then
     FAIL=1
 fi
 
-# === -f applies to -o output path (#1242) ===
+# === -f is input-only: output follows the -o extension regardless of -f position (#1242) ===
 $VDB -f csv $OUTDIR/ft-data.txt -o $OUTDIR/ft-out1.txt
-firstline_check "-f before -o: output saved as csv" "a,b" $OUTDIR/ft-out1.txt
+firstline_check "-f before -o: -f does not leak, output by extension" $'a\tb' $OUTDIR/ft-out1.txt
 
 $VDB -o $OUTDIR/ft-out2.txt -f csv $OUTDIR/ft-data.txt
-firstline_check "-o before -f: output saved by extension" $'a\tb' $OUTDIR/ft-out2.txt
+firstline_check "-f after -o: output by extension" $'a\tb' $OUTDIR/ft-out2.txt
+
+# === -of/--output-filetype sets the output format, overriding extension (#985) ===
+$VDB -f csv $OUTDIR/ft-data.txt -of csv -o $OUTDIR/ft-out3.txt
+firstline_check "-of csv: output saved as csv despite .txt" "a,b" $OUTDIR/ft-out3.txt
+
+$VDB -f csv $OUTDIR/ft-data.txt --output-filetype csv -o $OUTDIR/ft-out4.txt
+firstline_check "--output-filetype csv: alias of -of" "a,b" $OUTDIR/ft-out4.txt
 
 # === fallback to save_filetype requires confirm (#2286) ===
 if $VDB -o $OUTDIR/ft-out.xyz -f csv $OUTDIR/ft-data.txt 2>/dev/null; then
