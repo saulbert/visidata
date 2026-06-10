@@ -329,6 +329,7 @@ def main_vd():
     current_args = {}
     global_args = {}
     clionly_args = {}
+    output_filetype = None
     flGlobal = True
     optsdone = False
 
@@ -373,13 +374,15 @@ def main_vd():
 
             if opt and opt.cli_only:
                 clionly_args[optname] = optval
+                if optname == 'output':
+                    output_filetype = current_args.get('filetype')  #1242 -f in effect at -o applies to output path
             else:
                 # batch and interactive are only meaningful when applied globally,
                 # so exclude them from sheet-specific options. Those would
                 # override any later change to vd.options.batch in global settings.
                 if optname not in ('batch', 'interactive'):
                     current_args[optname] = optval
-                if flGlobal:
+                if flGlobal and optname != 'filetype':  #1242 #573 filetype attaches to paths, never globally
                     global_args[optname] = optval
         elif arg.startswith('+'):  # position cursor at start
             parsed_pos = vd.parsePos(arg[1:], inputs=inputs)
@@ -433,6 +436,8 @@ def main_vd():
 
     # filetype is consumed by openPath (stored on source path), not applied as a sheet option
     cli_filetype = current_args.pop('filetype', None)
+    if cli_filetype:
+        vd.stdinSource.options.set('filetype', cli_filetype, vd.stdinSource, cmdlog=False)  # covers open-file '-' in session/replay
 
     sources = []
     for p, opts in inputs:
@@ -514,6 +519,8 @@ def main_vd():
 
     if vd.stackedSheets and (flPipedOutput or args.output) and not args.output_cell:
         outpath = Path(args.output or '-')
+        if args.output and output_filetype:
+            outpath.options.set('filetype', output_filetype, outpath, cmdlog=False)  #1242
         vd.saveSheets(outpath, vd.activeSheet, confirm_overwrite=False)
 
     if vd.stackedSheets and args.output_cell:

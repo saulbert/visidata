@@ -39,7 +39,9 @@ ls -l | vd -f fixed
 
 ### How CLI options apply to files
 
-Because `-f`/`--filetype` is a regular option, it applies to all subsequent files on the command line, not just the one immediately following.
+`-f`/`--filetype` applies to all subsequent paths on the command line, not just the one immediately following.  This includes an output file given with `-o`; to save by the output file's extension instead, put `-o` before `-f`.
+
+`-f` attaches only to paths given on the command line (and to piped stdin).  Files opened later from within the session use their own extensions; the `open-file` command has its own filetype field.
 
 You can reset back to extension-based detection for later files with `-f ""`:
 

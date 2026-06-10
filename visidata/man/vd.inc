@@ -912,15 +912,16 @@ show/hide methods and hidden properties
 .No "tsv               "
 set loader to use for
 .Ar filetype
-instead of file extension
+instead of file extension; applies to subsequent paths on the CLI (including
+.Sy -o Ns ), not to files opened later in the session
 .
 .Lo d delimiter delimiter
 .No "\(rst                "
 field delimiter to use for tsv/usv filetype
 .
-.Lo y overwrite y
+.Lo y confirm y
 .No "y                 "
-overwrite existing files without confirmation
+auto-accept all confirmation prompts (including file overwrite)
 .
 .Lo ro overwrite n
 .No "n                 "
