@@ -26,7 +26,7 @@ vd.option('config', vd.config_file, 'config file to exec in Python', sheettype=N
 vd.option('play', '', 'file.vdj to replay')
 vd.option('batch', False, 'replay in batch mode (with no interface and all status sent to stdout)')
 vd.option('output', None, 'save the final visible sheet to output at the end of replay', cli_only=True)
-vd.option('output_filetype', '', 'filetype for the -o output path, overriding its extension', cli_only=True)
+vd.option('output_filetype', '', 'filetype for output path; overrides file extension', cli_only=True)
 vd.option('output_cell', None, 'output the cursor cell display value at exit', cli_only=True)
 vd.option('preplay', '', 'longnames to preplay before replay')
 vd.option('imports', 'plugins', 'imports to preload before .visidatarc (command-line only)')

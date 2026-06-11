@@ -28,7 +28,7 @@ def confirmOverwrite(vd, path, msg:str=''):
     ow = vd.options.overwrite
     if not ow.startswith(('c', 'y')):  #1805 empty/no/never: readonly
         vd.fail('overwrite disabled')
-    if ow.startswith('c'):  # legacy 'y': overwrite without confirm
+    if ow.startswith('c'):  # 'y' (legacy) excluded on purpose: it overwrites without confirming
         if not msg and path is not None:
             msg = f'{path.given} exists. overwrite? '
         vd.confirm(msg or 'overwrite? ')

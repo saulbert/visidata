@@ -5,7 +5,7 @@ import sys
 from visidata import VisiData, vd, Path, BaseSheet, TableSheet, TextSheet, SettableColumn
 
 
-vd.option('filetype', '', 'input filetype, overriding extension (-f/-if/--input-filetype)', replay=True)
+vd.option('filetype', '', 'input filetype; overrides file extension', replay=True)
 
 vd.stdinSource = None  # Path('-') with piped fp, set in main()
 
@@ -208,7 +208,7 @@ def open_txt(vd, p):
     return TextSheet(p.base_stem, source=p)
 
 
-BaseSheet.addCommand('o', 'open-file', 'vd.push(openSource(inputPath("open: "), create=True))', 'Open file or URL, with optional filetype field')  #1242
+BaseSheet.addCommand('o', 'open-file', 'vd.push(openSource(inputPath("open: "), create=True))', 'Open file or URL')
 TableSheet.addCommand('zo', 'open-cell-file', 'cd=cursorDisplay; (vd.push(openSource(cd) if cd else fail("no path given")) or fail(f"file {cd} does not exist"))', 'Open file or URL from path in current cell')
 BaseSheet.addCommand('gU', 'undo-last-quit', 'push(allSheets[-1])', 'reopen most recently closed sheet')
 
